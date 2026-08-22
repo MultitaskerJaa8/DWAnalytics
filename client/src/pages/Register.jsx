@@ -2,14 +2,15 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { departmentAPI } from '../utils/api';
-import { BarChart3, UserPlus } from 'lucide-react';
+import { BarChart3, UserPlus, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import '../styles/auth.css';
 
 const Register = () => {
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const { register, user } = useAuth();
   const [departments, setDepartments] = useState([]);
+  const [loadingDepts, setLoadingDepts] = useState(true);
   const [formData, setFormData] = useState({
     employeeId: '', name: '', email: '', password: '', department: '',
     designation: '', phone: '', role: 'employee',
@@ -17,30 +18,60 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    // Agar already logged in hai to redirect karo
+    if (user) {
+      navigate('/', { replace: true });
+    }
+  }, [user, navigate]);
+
+  useEffect(() => {
     fetchDepartments();
   }, []);
 
   const fetchDepartments = async () => {
     try {
+      setLoadingDepts(true);
       const { data } = await departmentAPI.getAll();
-      setDepartments(data.departments);
+      if (data && data.departments) {
+        setDepartments(data.departments);
+      } else {
+        setDepartments([]);
+      }
     } catch (error) {
-      toast.error('Failed to load departments');
+      console.error('Department fetch error:', error);
+      toast.error('Failed to load departments. Please refresh the page.');
+      // Fallback departments (agar API fail ho)
+      setDepartments([
+        { _id: 'temp1', name: 'Information Technology', code: 'IT' },
+        { _id: 'temp2', name: 'Human Resources', code: 'HR' },
+        { _id: 'temp3', name: 'Public Works', code: 'PWD' },
+        { _id: 'temp4', name: 'Finance & Accounts', code: 'FIN' },
+        { _id: 'temp5', name: 'Health Services', code: 'HLT' },
+      ]);
+    } finally {
+      setLoadingDepts(false);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (!formData.department) {
       toast.error('Please select a department');
       return;
     }
+
+    if (formData.password.length < 6) {
+      toast.error('Password must be at least 6 characters');
+      return;
+    }
+
     setLoading(true);
     const result = await register(formData);
     setLoading(false);
 
     if (result.success) {
-      navigate('/employee-dashboard');
+      navigate('/employee-dashboard', { replace: true });
     }
   };
 
@@ -52,6 +83,13 @@ const Register = () => {
         </div>
         <h1 className="auth-title">Create Account</h1>
         <p className="auth-subtitle">Register for Digital Workforce Analytics Platform</p>
+
+        {loadingDepts && (
+          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center space-x-2">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+            <span className="text-sm text-blue-700">Loading departments...</span>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -73,7 +111,7 @@ const Register = () => {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="auth-input"
-                placeholder="John Doe"
+                placeholder="Ashish Solanki"
                 required
               />
             </div>
@@ -87,7 +125,7 @@ const Register = () => {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="auth-input"
-                placeholder="you@govtworkforce.in"
+                placeholder="your@gmail.com"
                 required
               />
             </div>
@@ -113,6 +151,7 @@ const Register = () => {
                 onChange={(e) => setFormData({ ...formData, department: e.target.value })}
                 className="auth-input select-field"
                 required
+                disabled={loadingDepts}
               >
                 <option value="">Select Department</option>
                 {departments.map((dept) => (
@@ -121,6 +160,12 @@ const Register = () => {
                   </option>
                 ))}
               </select>
+              {departments.length === 0 && !loadingDepts && (
+                <p className="text-xs text-red-600 mt-1 flex items-center">
+                  <AlertCircle className="w-3 h-3 mr-1" />
+                  No departments available. Contact admin.
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">Designation *</label>
@@ -143,7 +188,7 @@ const Register = () => {
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 className="auth-input"
-                placeholder="9876543210"
+                placeholder="7895227827"
               />
             </div>
             <div>
@@ -159,7 +204,11 @@ const Register = () => {
             </div>
           </div>
 
-          <button type="submit" disabled={loading} className="auth-button flex items-center justify-center space-x-2">
+          <button 
+            type="submit" 
+            disabled={loading || loadingDepts || departments.length === 0} 
+            className="auth-button flex items-center justify-center space-x-2"
+          >
             <UserPlus className="w-5 h-5" />
             <span>{loading ? 'Creating Account...' : 'Create Account'}</span>
           </button>
