@@ -1,0 +1,16 @@
+{
+  "short_name": "WorkforceAnalytics",
+  "name": "Digital Workforce Performance Analytics Platform",
+  "icons": [
+    {
+      "src": "logo.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1E40AF",
+  "background_color": "#F8FAFC"
+}
