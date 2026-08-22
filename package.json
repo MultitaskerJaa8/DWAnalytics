@@ -4,8 +4,7 @@
   "description": "Digital Workforce Performance Analytics Platform",
   "private": true,
   "engines": {
-    "node": "24.x",
-    "npm": "11.x"
+    "node": ">=24.x"
   },
   "scripts": {
     "install-server": "cd server && npm install --legacy-peer-deps",
@@ -16,7 +15,7 @@
     "client": "cd client && npm start",
     "start": "concurrently -n SERVER,CLIENT -c green,blue \"npm run server\" \"npm run client\"",
     "seed": "cd server && npm run seed",
-    "build": "cd client && npm install --legacy-peer-deps && CI=false npm run build",
+    "build": "cd client && npm install --legacy-peer-deps && NODE_OPTIONS=--openssl-legacy-provider npm run build",
     "vercel-build": "npm run build"
   },
   "devDependencies": {
