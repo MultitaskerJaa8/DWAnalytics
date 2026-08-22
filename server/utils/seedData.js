@@ -33,14 +33,14 @@ const seedDatabase = async () => {
 
     console.log('👤 Creating Admin user...');
     const admin = await User.create({
-      employeeId: 'ADM001',
-      name: 'Rajesh Kumar Sharma',
-      email: 'admin@govtworkforce.in',
+      employeeId: 'Master',
+      name: 'Ashish Solanki',
+      email: 'admin@gmail.com',
       password: 'Admin@123',
       department: itDept._id,
       designation: 'System Administrator',
       role: 'admin',
-      phone: '9876543210',
+      phone: '7895227827',
       employmentStatus: 'active',
     });
 
@@ -48,24 +48,24 @@ const seedDatabase = async () => {
     const supervisor1 = await User.create({
       employeeId: 'SUP001',
       name: 'Priya Verma',
-      email: 'supervisor.it@govtworkforce.in',
+      email: 'supervisor@gmail.com',
       password: 'Supervisor@123',
       department: itDept._id,
       designation: 'IT Department Head',
       role: 'supervisor',
-      phone: '9876543211',
+      phone: '7895227827',
       employmentStatus: 'active',
     });
 
     const supervisor2 = await User.create({
       employeeId: 'SUP002',
       name: 'Anil Kumar Singh',
-      email: 'supervisor.pwd@govtworkforce.in',
+      email: 'supervisor1@gmail.com',
       password: 'Supervisor@123',
       department: pwdDept._id,
       designation: 'Public Works Supervisor',
       role: 'supervisor',
-      phone: '9876543212',
+      phone: '7895227827',
       employmentStatus: 'active',
     });
 
@@ -74,12 +74,12 @@ const seedDatabase = async () => {
 
     console.log('👤 Creating Employees...');
     const employeesData = [
-      { employeeId: 'EMP001', name: 'Amit Patel', email: 'amit.patel@govtworkforce.in', department: itDept._id, designation: 'Software Developer', reportingManager: supervisor1._id },
-      { employeeId: 'EMP002', name: 'Sneha Reddy', email: 'sneha.reddy@govtworkforce.in', department: itDept._id, designation: 'Network Engineer', reportingManager: supervisor1._id },
-      { employeeId: 'EMP003', name: 'Vikram Malhotra', email: 'vikram.malhotra@govtworkforce.in', department: pwdDept._id, designation: 'Civil Engineer', reportingManager: supervisor2._id },
-      { employeeId: 'EMP004', name: 'Kavita Joshi', email: 'kavita.joshi@govtworkforce.in', department: hrDept._id, designation: 'HR Executive', reportingManager: supervisor1._id },
-      { employeeId: 'EMP005', name: 'Ramesh Gupta', email: 'ramesh.gupta@govtworkforce.in', department: finDept._id, designation: 'Accounts Officer', reportingManager: supervisor2._id },
-      { employeeId: 'EMP006', name: 'Deepa Nair', email: 'deepa.nair@govtworkforce.in', department: hltDept._id, designation: 'Health Program Officer', reportingManager: supervisor1._id },
+      { employeeId: 'EMP001', name: 'Amit Patel', email: 'amitpatel@gmail.com', department: itDept._id, designation: 'Software Developer', reportingManager: supervisor1._id },
+      { employeeId: 'EMP002', name: 'Sneha Reddy', email: 'snehareddy@gmail.com', department: itDept._id, designation: 'Network Engineer', reportingManager: supervisor1._id },
+      { employeeId: 'EMP003', name: 'Vikram Malhotra', email: 'vikrammalhotra@gmail.com', department: pwdDept._id, designation: 'Civil Engineer', reportingManager: supervisor2._id },
+      { employeeId: 'EMP004', name: 'Kavita Joshi', email: 'kavitajoshi@gmail.com', department: hrDept._id, designation: 'HR Executive', reportingManager: supervisor1._id },
+      { employeeId: 'EMP005', name: 'Ramesh Gupta', email: 'rameshgupta@gmail.com', department: finDept._id, designation: 'Accounts Officer', reportingManager: supervisor2._id },
+      { employeeId: 'EMP006', name: 'Deepa Nair', email: 'deepanair@gmail.com', department: hltDept._id, designation: 'Health Program Officer', reportingManager: supervisor1._id },
     ];
 
     const employees = [];
@@ -130,9 +130,9 @@ const seedDatabase = async () => {
 
     console.log('\n✅ Database seeded successfully!\n');
     console.log('========== LOGIN CREDENTIALS ==========');
-    console.log('ADMIN      -> admin@govtworkforce.in / Admin@123');
-    console.log('SUPERVISOR -> supervisor.it@govtworkforce.in / Supervisor@123');
-    console.log('EMPLOYEE   -> amit.patel@govtworkforce.in / Employee@123');
+    console.log('ADMIN      -> admin@gmail.com / Admin@123');
+    console.log('SUPERVISOR -> supervisor@gmail.com / Supervisor@123');
+    console.log('EMPLOYEE   -> employee@gmail.com / Employee@123');
     console.log('========================================\n');
 
     process.exit(0);
