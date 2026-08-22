@@ -40,7 +40,7 @@ const Login = () => {
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               className="auth-input"
-              placeholder="you@govtworkforce.in"
+              placeholder="your@gmail.com"
               required
             />
           </div>
@@ -72,15 +72,7 @@ const Login = () => {
           </p>
         </div>
 
-        <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <p className="text-xs font-semibold text-blue-900 mb-2">Demo Credentials:</p>
-          <div className="text-xs text-blue-800 space-y-1">
-            <p><strong>Admin:</strong> admin@govtworkforce.in / Admin@123</p>
-            <p><strong>Supervisor:</strong> supervisor.it@govtworkforce.in / Supervisor@123</p>
-            <p><strong>Employee:</strong> amit.patel@govtworkforce.in / Employee@123</p>
-          </div>
         </div>
-      </div>
     </div>
   );
 };
