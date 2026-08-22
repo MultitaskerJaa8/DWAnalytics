@@ -2,14 +2,21 @@
   "name": "workforce-analytics-client",
   "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": ">=20.x"
-  },
-{
   "dependencies": {
-    "react-scripts": "5.0.1"
-  }
-}
+    "ajv": "8.12.0",
+    "axios": "^1.7.2",
+    "date-fns": "^3.6.0",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.2",
+    "lucide-react": "^0.400.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.4.1",
+    "react-router-dom": "^6.24.0",
+    "react-scripts": "5.0.1",
+    "recharts": "^2.12.7",
+    "xlsx": "^0.18.5"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -28,8 +35,12 @@
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4"
   },
+  "resolutions": {
+    "ajv": "8.12.0",
+    "ajv-keywords": "5.1.0"
+  },
   "overrides": {
-    "ajv": "^8.12.0",
-    "ajv-keywords": "^5.1.0"
+    "ajv": "8.12.0",
+    "ajv-keywords": "5.1.0"
   }
 }
