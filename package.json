@@ -1,23 +1,25 @@
 {
   "name": "digital-workforce-analytics",
   "version": "1.0.0",
-  "description": "Digital Workforce Performance Analytics Platform for Government Departments",
+  "description": "Digital Workforce Performance Analytics Platform",
   "private": true,
   "scripts": {
-    "install-server": "cd server && npm install",
-    "install-client": "cd client && npm install",
+    "install-server": "cd server && npm install --legacy-peer-deps",
+    "install-client": "cd client && npm install --legacy-peer-deps",
     "install-all": "npm run install-server && npm run install-client",
     "postinstall": "npm run install-all",
     "server": "cd server && npm run dev",
     "client": "cd client && npm start",
     "start": "concurrently -n SERVER,CLIENT -c green,blue \"npm run server\" \"npm run client\"",
     "seed": "cd server && npm run seed",
-    "build": "cd client && npm install && npm run build"
+    "build": "cd client && npm install --legacy-peer-deps && npm run build",
+    "vercel-build": "npm run build"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   }
 }
