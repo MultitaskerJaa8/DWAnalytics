@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "cd client && npm install --legacy-peer-deps && npm run build",
+  "buildCommand": "cd client && rm -rf node_modules package-lock.json && npm install --force && npm run build",
   "outputDirectory": "client/build",
   "installCommand": "npm install --legacy-peer-deps",
   "rewrites": [
@@ -9,6 +9,7 @@
   ],
   "env": {
     "NODE_ENV": "production",
-    "NODE_OPTIONS": "--openssl-legacy-provider"
+    "GENERATE_SOURCEMAP": "false",
+    "CI": "false"
   }
 }
