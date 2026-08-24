@@ -1,8 +1,6 @@
 const KPI = require('../models/KPI');
 const AuditLog = require('../models/AuditLog');
 
-// @desc    Create new KPI
-// @route   POST /api/kpi
 const createKPI = async (req, res, next) => {
   try {
     const { title, category, description, department, assignedTo, targetValue, unit, weightage, evaluationCycle, startDate, endDate } = req.body;
@@ -26,14 +24,12 @@ const createKPI = async (req, res, next) => {
       .populate('assignedTo', 'name employeeId')
       .populate('createdBy', 'name');
 
-    res.status(201).json({ success: true, message: 'KPI created successfully', kpi: populatedKPI });
+    res.status(201).json({ success: true, message: 'KPI created', kpi: populatedKPI });
   } catch (error) {
     next(error);
   }
 };
 
-// @desc    Get all KPIs with filters
-// @route   GET /api/kpi
 const getAllKPIs = async (req, res, next) => {
   try {
     const { department, status, category, evaluationCycle } = req.query;
@@ -55,8 +51,6 @@ const getAllKPIs = async (req, res, next) => {
   }
 };
 
-// @desc    Get KPIs assigned to logged-in employee
-// @route   GET /api/kpi/my-kpis
 const getMyKPIs = async (req, res, next) => {
   try {
     const kpis = await KPI.find({
@@ -73,8 +67,6 @@ const getMyKPIs = async (req, res, next) => {
   }
 };
 
-// @desc    Get single KPI
-// @route   GET /api/kpi/:id
 const getKPIById = async (req, res, next) => {
   try {
     const kpi = await KPI.findById(req.params.id)
@@ -92,8 +84,6 @@ const getKPIById = async (req, res, next) => {
   }
 };
 
-// @desc    Update KPI
-// @route   PUT /api/kpi/:id
 const updateKPI = async (req, res, next) => {
   try {
     const existing = await KPI.findById(req.params.id);
@@ -110,14 +100,12 @@ const updateKPI = async (req, res, next) => {
       details: `KPI updated: ${kpi.title}`, ipAddress: req.ip,
     });
 
-    res.status(200).json({ success: true, message: 'KPI updated successfully', kpi });
+    res.status(200).json({ success: true, message: 'KPI updated', kpi });
   } catch (error) {
     next(error);
   }
 };
 
-// @desc    Delete KPI
-// @route   DELETE /api/kpi/:id
 const deleteKPI = async (req, res, next) => {
   try {
     const kpi = await KPI.findById(req.params.id);
@@ -132,7 +120,7 @@ const deleteKPI = async (req, res, next) => {
       details: `KPI deleted: ${kpi.title}`, ipAddress: req.ip,
     });
 
-    res.status(200).json({ success: true, message: 'KPI deleted successfully' });
+    res.status(200).json({ success: true, message: 'KPI deleted' });
   } catch (error) {
     next(error);
   }
