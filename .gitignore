@@ -3,13 +3,6 @@ node_modules/
 client/node_modules/
 server/node_modules/
 
-# Environment Variables
-.env
-server/.env
-client/.env
-.env.local
-.env.production
-
 # Build outputs
 client/build/
 dist/
@@ -35,3 +28,10 @@ Thumbs.db
 
 # Vercel
 .vercel
+
+# ALLOW .env files for demo project (COMMENT OUT THESE LINES):
+# .env
+# server/.env
+# client/.env
+# .env.local
+# .env.production
