@@ -1,4 +1,4 @@
-import { Target, Calendar, TrendingUp } from 'lucide-react';
+import { Target, Calendar } from 'lucide-react';
 import { formatDate, getAchievementPercent } from '../utils/helpers';
 
 const KPICard = ({ kpi, onClick, showProgress = false, achievedValue = 0 }) => {
@@ -20,7 +20,7 @@ const KPICard = ({ kpi, onClick, showProgress = false, achievedValue = 0 }) => {
           </div>
         </div>
         <span className="badge bg-primary-100 text-primary-800 border-primary-300">
-          {kpi.weightage}% weightage
+          {kpi.weightage}%
         </span>
       </div>
 
