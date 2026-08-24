@@ -15,7 +15,7 @@ const NotificationBell = () => {
       }
     };
     fetchPending();
-    const interval = setInterval(fetchPending, 60000); // refresh every minute
+    const interval = setInterval(fetchPending, 60000);
     return () => clearInterval(interval);
   }, []);
 
