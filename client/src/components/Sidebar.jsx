@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
-  LayoutDashboard, Target, FileText, Users, TrendingUp, UserCog, X, FolderKanban, ClipboardCheck,
+  LayoutDashboard, Target, FileText, Users, TrendingUp, UserCog, X, ClipboardCheck,
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -29,7 +29,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     { path: '/kpi-management', label: 'KPI Management', icon: Target },
     { path: '/team-performance', label: 'Department Analytics', icon: TrendingUp },
     { path: '/performance-reports', label: 'Reports', icon: FileText },
-    { path: '/profile', label: 'System Settings', icon: FolderKanban },
+    { path: '/profile', label: 'System Settings', icon: UserCog },
   ];
 
   const getLinks = () => {
@@ -42,12 +42,10 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Mobile Overlay */}
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden" onClick={onClose}></div>
       )}
 
-      {/* Sidebar */}
       <aside
         className={`fixed lg:sticky top-0 left-0 h-screen bg-white border-r border-gray-200 z-40 transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
