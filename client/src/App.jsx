@@ -44,8 +44,8 @@ function App() {
       />
 
       <Routes>
-          <Route path="/login" element={!loading && user ? <Navigate to={getDashboardRoute()} replace /> : <Login />} />
-          <Route path="/register" element={!loading && user ? <Navigate to={getDashboardRoute()} replace /> : <Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
         <Route
           path="/employee-dashboard"
