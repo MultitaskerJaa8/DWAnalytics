@@ -3,8 +3,6 @@ const KPI = require('../models/KPI');
 const User = require('../models/User');
 const AuditLog = require('../models/AuditLog');
 
-// @desc    Submit work log / performance entry
-// @route   POST /api/performance/submit
 const submitWork = async (req, res, next) => {
   try {
     const { kpi, taskDetails, achievedValue, month, year } = req.body;
@@ -40,14 +38,12 @@ const submitWork = async (req, res, next) => {
       .populate('kpi', 'title targetValue weightage unit')
       .populate('employee', 'name employeeId');
 
-    res.status(201).json({ success: true, message: 'Work submitted successfully', performance: populated });
+    res.status(201).json({ success: true, message: 'Work submitted', performance: populated });
   } catch (error) {
     next(error);
   }
 };
 
-// @desc    Get logged-in employee's submissions
-// @route   GET /api/performance/my-submissions
 const getMySubmissions = async (req, res, next) => {
   try {
     const { status, month, year } = req.query;
@@ -67,8 +63,6 @@ const getMySubmissions = async (req, res, next) => {
   }
 };
 
-// @desc    Get pending approvals for supervisor/admin
-// @route   GET /api/performance/pending-approvals
 const getPendingApprovals = async (req, res, next) => {
   try {
     const filter = { status: 'submitted' };
@@ -89,19 +83,17 @@ const getPendingApprovals = async (req, res, next) => {
   }
 };
 
-// @desc    Approve or reject a submission (with score calculation)
-// @route   PUT /api/performance/:id/review
 const reviewSubmission = async (req, res, next) => {
   try {
     const { status, supervisorRemarks, approvedScore } = req.body;
 
     if (!['approved', 'rejected'].includes(status)) {
-      return res.status(400).json({ success: false, message: 'Status must be approved or rejected' });
+      return res.status(400).json({ success: false, message: 'Invalid status' });
     }
 
     const performance = await Performance.findById(req.params.id).populate('kpi');
     if (!performance) {
-      return res.status(404).json({ success: false, message: 'Performance submission not found' });
+      return res.status(404).json({ success: false, message: 'Submission not found' });
     }
 
     performance.status = status;
@@ -121,18 +113,16 @@ const reviewSubmission = async (req, res, next) => {
       user: req.user._id,
       action: status === 'approved' ? 'APPROVE_PERFORMANCE' : 'REJECT_PERFORMANCE',
       module: 'Performance',
-      details: `Submission ${status} for KPI: ${performance.kpi.title}`,
+      details: `Submission ${status}`,
       ipAddress: req.ip,
     });
 
-    res.status(200).json({ success: true, message: `Submission ${status} successfully`, performance });
+    res.status(200).json({ success: true, message: `Submission ${status}`, performance });
   } catch (error) {
     next(error);
   }
 };
 
-// @desc    Get team performance overview (supervisor)
-// @route   GET /api/performance/team
 const getTeamPerformance = async (req, res, next) => {
   try {
     const teamMembers = await User.find({ reportingManager: req.user._id }).select('_id name employeeId designation');
@@ -156,8 +146,6 @@ const getTeamPerformance = async (req, res, next) => {
   }
 };
 
-// @desc    Get performance history for an employee
-// @route   GET /api/performance/history/:employeeId?
 const getPerformanceHistory = async (req, res, next) => {
   try {
     const employeeId = req.params.employeeId || req.user._id;
@@ -172,6 +160,4 @@ const getPerformanceHistory = async (req, res, next) => {
   }
 };
 
-module.exports = {
-  submitWork, getMySubmissions, getPendingApprovals, reviewSubmission, getTeamPerformance, getPerformanceHistory,
-};
+module.exports = { submitWork, getMySubmissions, getPendingApprovals, reviewSubmission, getTeamPerformance, getPerformanceHistory };
