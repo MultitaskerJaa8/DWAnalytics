@@ -6,8 +6,6 @@ const AuditLog = require('../models/AuditLog');
 const PDFDocument = require('pdfkit');
 const ExcelJS = require('exceljs');
 
-// @desc    Role-based dashboard statistics
-// @route   GET /api/reports/dashboard-stats
 const getDashboardStats = async (req, res, next) => {
   try {
     if (req.user.role === 'admin') {
@@ -49,8 +47,6 @@ const getDashboardStats = async (req, res, next) => {
   }
 };
 
-// @desc    Department-wise comparison analytics
-// @route   GET /api/reports/department-analytics
 const getDepartmentAnalytics = async (req, res, next) => {
   try {
     const departments = await Department.find();
@@ -75,8 +71,6 @@ const getDepartmentAnalytics = async (req, res, next) => {
   }
 };
 
-// @desc    Export PDF report
-// @route   GET /api/reports/export/pdf
 const exportPDFReport = async (req, res, next) => {
   try {
     const { employeeId } = req.query;
@@ -102,16 +96,14 @@ const exportPDFReport = async (req, res, next) => {
     performances.forEach((p, index) => {
       doc.fontSize(11)
         .text(`${index + 1}. Employee: ${p.employee?.name} (${p.employee?.employeeId})`)
-        .text(`   KPI: ${p.kpi?.title} | Category: ${p.kpi?.category}`)
-        .text(`   Task: ${p.taskDetails}`)
-        .text(`   Approved Score: ${p.approvedScore} | Final Score: ${p.finalScore}`)
-        .text(`   Period: ${p.evaluationPeriod.month}/${p.evaluationPeriod.year}`)
+        .text(`   KPI: ${p.kpi?.title}`)
+        .text(`   Score: ${p.finalScore}`)
         .moveDown();
     });
 
     await AuditLog.create({
       user: req.user._id, action: 'GENERATE_REPORT', module: 'Report',
-      details: 'PDF performance report generated', ipAddress: req.ip,
+      details: 'PDF report generated', ipAddress: req.ip,
     });
 
     doc.end();
@@ -120,8 +112,6 @@ const exportPDFReport = async (req, res, next) => {
   }
 };
 
-// @desc    Export Excel report
-// @route   GET /api/reports/export/excel
 const exportExcelReport = async (req, res, next) => {
   try {
     const { employeeId } = req.query;
@@ -142,20 +132,13 @@ const exportExcelReport = async (req, res, next) => {
       { header: 'Employee ID', key: 'empId', width: 15 },
       { header: 'KPI Title', key: 'kpi', width: 25 },
       { header: 'Category', key: 'category', width: 20 },
-      { header: 'Task Details', key: 'task', width: 35 },
-      { header: 'Approved Score', key: 'approvedScore', width: 15 },
-      { header: 'Final Score', key: 'finalScore', width: 12 },
-      { header: 'Period', key: 'period', width: 12 },
+      { header: 'Score', key: 'score', width: 12 },
     ];
-
-    sheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
-    sheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E40AF' } };
 
     performances.forEach((p) => {
       sheet.addRow({
         name: p.employee?.name, empId: p.employee?.employeeId, kpi: p.kpi?.title,
-        category: p.kpi?.category, task: p.taskDetails, approvedScore: p.approvedScore,
-        finalScore: p.finalScore, period: `${p.evaluationPeriod.month}/${p.evaluationPeriod.year}`,
+        category: p.kpi?.category, score: p.finalScore,
       });
     });
 
@@ -164,7 +147,7 @@ const exportExcelReport = async (req, res, next) => {
 
     await AuditLog.create({
       user: req.user._id, action: 'GENERATE_REPORT', module: 'Report',
-      details: 'Excel performance report generated', ipAddress: req.ip,
+      details: 'Excel report generated', ipAddress: req.ip,
     });
 
     await workbook.xlsx.write(res);
