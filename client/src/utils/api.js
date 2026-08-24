@@ -6,7 +6,6 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-// Attach token to every request
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -18,7 +17,6 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Handle expired/invalid tokens globally
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -33,7 +31,6 @@ api.interceptors.response.use(
   }
 );
 
-// ---------- AUTH ----------
 export const authAPI = {
   login: (data) => api.post('/auth/login', data),
   register: (data) => api.post('/auth/register', data),
@@ -43,7 +40,6 @@ export const authAPI = {
   logout: () => api.post('/auth/logout'),
 };
 
-// ---------- KPI ----------
 export const kpiAPI = {
   getAll: (params) => api.get('/kpi', { params }),
   getMyKPIs: () => api.get('/kpi/my-kpis'),
@@ -53,7 +49,6 @@ export const kpiAPI = {
   delete: (id) => api.delete(`/kpi/${id}`),
 };
 
-// ---------- PERFORMANCE ----------
 export const performanceAPI = {
   submit: (formData) =>
     api.post('/performance/submit', formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
@@ -64,7 +59,6 @@ export const performanceAPI = {
   getHistory: (employeeId = '') => api.get(`/performance/history/${employeeId}`),
 };
 
-// ---------- USER ----------
 export const userAPI = {
   getAll: (params) => api.get('/user', { params }),
   getById: (id) => api.get(`/user/${id}`),
@@ -74,7 +68,6 @@ export const userAPI = {
   delete: (id) => api.delete(`/user/${id}`),
 };
 
-// ---------- DEPARTMENT ----------
 export const departmentAPI = {
   getAll: () => api.get('/department'),
   getById: (id) => api.get(`/department/${id}`),
@@ -83,7 +76,6 @@ export const departmentAPI = {
   delete: (id) => api.delete(`/department/${id}`),
 };
 
-// ---------- REPORTS ----------
 export const reportsAPI = {
   getDashboardStats: () => api.get('/reports/dashboard-stats'),
   getDepartmentAnalytics: () => api.get('/reports/department-analytics'),
