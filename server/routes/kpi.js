@@ -7,14 +7,10 @@ const { authorize } = require('../middleware/roleCheck');
 router.use(protect);
 
 router.get('/my-kpis', getMyKPIs);
-
-router.route('/')
-  .get(getAllKPIs)
-  .post(authorize('admin', 'supervisor'), createKPI);
-
-router.route('/:id')
-  .get(getKPIById)
-  .put(authorize('admin', 'supervisor'), updateKPI)
-  .delete(authorize('admin'), deleteKPI);
+router.get('/', getAllKPIs);
+router.post('/', authorize('admin', 'supervisor'), createKPI);
+router.get('/:id', getKPIById);
+router.put('/:id', authorize('admin', 'supervisor'), updateKPI);
+router.delete('/:id', authorize('admin'), deleteKPI);
 
 module.exports = router;
