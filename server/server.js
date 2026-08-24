@@ -8,26 +8,31 @@ const fs = require('fs');
 dotenv.config({ path: path.join(__dirname, '.env') });
 
 const connectDB = require('./config/db');
+const { errorHandler, notFound } = require('./middleware/errorHandler');
+
+// Ensure uploads folder exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Connect to MongoDB Atlas
+connectDB();
 
 const app = express();
 
-// Middleware
+// CORS Configuration
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',')
   : ['http://localhost:3000'];
 
-// CORS Configuration (UPDATE)
 app.use(
   cors({
     origin: function (origin, callback) {
       // Allow requests with no origin (mobile apps, curl, postman)
       if (!origin) return callback(null, true);
       
-      const allowedOrigins = process.env.ALLOWED_ORIGINS
-        ? process.env.ALLOWED_ORIGINS.split(',')
-        : ['http://localhost:3000', 'http://localhost:5000'];
-      
-      if (allowedOrigins.indexOf(origin) !== -1) {
+      if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
         callback(null, true);
       } else {
         callback(null, true); // TEMPORARY: Allow all origins for testing
@@ -57,6 +62,7 @@ app.get('/api/health', (req, res) => {
     success: true,
     message: 'Digital Workforce Analytics API is running',
     timestamp: new Date().toISOString(),
+    env: process.env.NODE_ENV,
   });
 });
 
@@ -71,6 +77,7 @@ if (process.env.NODE_ENV === 'production') {
   }
 }
 
+// Error handlers (must be last)
 app.use(notFound);
 app.use(errorHandler);
 
