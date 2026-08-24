@@ -1,8 +1,6 @@
 const Department = require('../models/Department');
 const AuditLog = require('../models/AuditLog');
 
-// @desc    Create department
-// @route   POST /api/department
 const createDepartment = async (req, res, next) => {
   try {
     const { name, code, description, head } = req.body;
@@ -13,7 +11,7 @@ const createDepartment = async (req, res, next) => {
 
     const exists = await Department.findOne({ $or: [{ name }, { code: code.toUpperCase() }] });
     if (exists) {
-      return res.status(400).json({ success: false, message: 'Department with this name or code already exists' });
+      return res.status(400).json({ success: false, message: 'Department already exists' });
     }
 
     const department = await Department.create({ name, code, description, head: head || null });
@@ -23,14 +21,12 @@ const createDepartment = async (req, res, next) => {
       details: `Department created: ${department.name}`, ipAddress: req.ip,
     });
 
-    res.status(201).json({ success: true, message: 'Department created successfully', department });
+    res.status(201).json({ success: true, message: 'Department created', department });
   } catch (error) {
     next(error);
   }
 };
 
-// @desc    Get all departments
-// @route   GET /api/department
 const getAllDepartments = async (req, res, next) => {
   try {
     const departments = await Department.find().populate('head', 'name employeeId designation').sort({ name: 1 });
@@ -40,8 +36,6 @@ const getAllDepartments = async (req, res, next) => {
   }
 };
 
-// @desc    Get single department
-// @route   GET /api/department/:id
 const getDepartmentById = async (req, res, next) => {
   try {
     const department = await Department.findById(req.params.id).populate('head', 'name employeeId');
@@ -54,8 +48,6 @@ const getDepartmentById = async (req, res, next) => {
   }
 };
 
-// @desc    Update department
-// @route   PUT /api/department/:id
 const updateDepartment = async (req, res, next) => {
   try {
     const department = await Department.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
@@ -69,14 +61,12 @@ const updateDepartment = async (req, res, next) => {
       details: `Department updated: ${department.name}`, ipAddress: req.ip,
     });
 
-    res.status(200).json({ success: true, message: 'Department updated successfully', department });
+    res.status(200).json({ success: true, message: 'Department updated', department });
   } catch (error) {
     next(error);
   }
 };
 
-// @desc    Delete department
-// @route   DELETE /api/department/:id
 const deleteDepartment = async (req, res, next) => {
   try {
     const department = await Department.findById(req.params.id);
@@ -85,7 +75,7 @@ const deleteDepartment = async (req, res, next) => {
     }
 
     await department.deleteOne();
-    res.status(200).json({ success: true, message: 'Department deleted successfully' });
+    res.status(200).json({ success: true, message: 'Department deleted' });
   } catch (error) {
     next(error);
   }
