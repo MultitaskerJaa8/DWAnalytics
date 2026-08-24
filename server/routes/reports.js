@@ -1,16 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { getAllUsers, getUserById, getSupervisorsAndEmployees, updateUser, updateUserRole, deleteUser } = require('../controllers/userController');
+const { getDashboardStats, getDepartmentAnalytics, exportPDFReport, exportExcelReport } = require('../controllers/reportController');
 const { protect } = require('../middleware/auth');
 const { authorize } = require('../middleware/roleCheck');
 
 router.use(protect);
 
-router.get('/', authorize('admin', 'supervisor'), getAllUsers);
-router.get('/list/supervisors-employees', authorize('admin'), getSupervisorsAndEmployees);
-router.get('/:id', getUserById);
-router.put('/:id', authorize('admin'), updateUser);
-router.put('/:id/role', authorize('admin'), updateUserRole);
-router.delete('/:id', authorize('admin'), deleteUser);
+router.get('/dashboard-stats', getDashboardStats);
+router.get('/department-analytics', authorize('admin'), getDepartmentAnalytics);
+router.get('/export/pdf', exportPDFReport);
+router.get('/export/excel', exportExcelReport);
 
 module.exports = router;
