@@ -8,7 +8,7 @@ import '../styles/auth.css';
 
 const Register = () => {
   const navigate = useNavigate();
-  const { register, user } = useAuth();
+  const { register } = useAuth();
   const [departments, setDepartments] = useState([]);
   const [loadingDepts, setLoadingDepts] = useState(true);
   const [formData, setFormData] = useState({
@@ -18,13 +18,6 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Agar already logged in hai to redirect karo
-    if (user) {
-      navigate('/', { replace: true });
-    }
-  }, [user, navigate]);
-
-  useEffect(() => {
     fetchDepartments();
   }, []);
 
@@ -32,22 +25,9 @@ const Register = () => {
     try {
       setLoadingDepts(true);
       const { data } = await departmentAPI.getAll();
-      if (data && data.departments) {
-        setDepartments(data.departments);
-      } else {
-        setDepartments([]);
-      }
+      setDepartments(data.departments || []);
     } catch (error) {
-      console.error('Department fetch error:', error);
-      toast.error('Failed to load departments. Please refresh the page.');
-      // Fallback departments (agar API fail ho)
-      setDepartments([
-        { _id: 'temp1', name: 'Information Technology', code: 'IT' },
-        { _id: 'temp2', name: 'Human Resources', code: 'HR' },
-        { _id: 'temp3', name: 'Public Works', code: 'PWD' },
-        { _id: 'temp4', name: 'Finance & Accounts', code: 'FIN' },
-        { _id: 'temp5', name: 'Health Services', code: 'HLT' },
-      ]);
+      toast.error('Failed to load departments');
     } finally {
       setLoadingDepts(false);
     }
@@ -55,23 +35,16 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     if (!formData.department) {
       toast.error('Please select a department');
       return;
     }
-
-    if (formData.password.length < 6) {
-      toast.error('Password must be at least 6 characters');
-      return;
-    }
-
     setLoading(true);
     const result = await register(formData);
     setLoading(false);
 
     if (result.success) {
-      navigate('/employee-dashboard', { replace: true });
+      navigate('/employee-dashboard');
     }
   };
 
@@ -111,7 +84,7 @@ const Register = () => {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="auth-input"
-                placeholder="Ashish Solanki"
+                placeholder="John Doe"
                 required
               />
             </div>
@@ -125,7 +98,7 @@ const Register = () => {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="auth-input"
-                placeholder="your@gmail.com"
+                placeholder="you@govtworkforce.in"
                 required
               />
             </div>
@@ -163,7 +136,7 @@ const Register = () => {
               {departments.length === 0 && !loadingDepts && (
                 <p className="text-xs text-red-600 mt-1 flex items-center">
                   <AlertCircle className="w-3 h-3 mr-1" />
-                  No departments available. Contact admin.
+                  No departments available
                 </p>
               )}
             </div>
@@ -188,7 +161,7 @@ const Register = () => {
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 className="auth-input"
-                placeholder="7895227827"
+                placeholder="9876543210"
               />
             </div>
             <div>
