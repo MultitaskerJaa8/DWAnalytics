@@ -1,5 +1,5 @@
-import { CheckCircle, XCircle, Eye } from 'lucide-react';
-import { formatDate, getMonthName } from '../utils/helpers';
+import { Eye } from 'lucide-react';
+import { getMonthName } from '../utils/helpers';
 import { STATUS_COLORS } from '../utils/constants';
 
 const ApprovalTable = ({ submissions, onReview, loading }) => {
