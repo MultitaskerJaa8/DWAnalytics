@@ -2,9 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const {
-  submitWork, getMySubmissions, getPendingApprovals, reviewSubmission, getTeamPerformance, getPerformanceHistory,
-} = require('../controllers/performanceController');
+const { submitWork, getMySubmissions, getPendingApprovals, reviewSubmission, getTeamPerformance, getPerformanceHistory } = require('../controllers/performanceController');
 const { protect } = require('../middleware/auth');
 const { authorize } = require('../middleware/roleCheck');
 
