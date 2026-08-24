@@ -16,17 +16,17 @@ const protect = async (req, res, next) => {
     const user = await User.findById(decoded.id).populate('department', 'name code');
 
     if (!user) {
-      return res.status(401).json({ success: false, message: 'User not found, authorization denied' });
+      return res.status(401).json({ success: false, message: 'User not found' });
     }
 
     if (user.employmentStatus === 'terminated' || user.employmentStatus === 'inactive') {
-      return res.status(403).json({ success: false, message: 'Account is inactive. Contact admin.' });
+      return res.status(403).json({ success: false, message: 'Account is inactive' });
     }
 
     req.user = user;
     next();
   } catch (error) {
-    return res.status(401).json({ success: false, message: 'Not authorized, token failed or expired' });
+    return res.status(401).json({ success: false, message: 'Not authorized, token failed' });
   }
 };
 
