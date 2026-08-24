@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Upload, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { getCurrentMonthYear } from '../utils/helpers';
 
@@ -56,7 +56,7 @@ const TaskSubmissionForm = ({ kpi, onSubmit, onCancel }) => {
             value={formData.taskDetails}
             onChange={(e) => setFormData({ ...formData, taskDetails: e.target.value })}
             className="input-field min-h-[100px]"
-            placeholder="Describe the work completed, milestones achieved, etc."
+            placeholder="Describe the work completed..."
             required
           />
         </div>
