@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
       toast.success(`Welcome back, ${data.user.name}!`);
       return { success: true, user: data.user };
     } catch (error) {
-      const message = error.response?.data?.message || 'Login failed. Please try again.';
+      const message = error.response?.data?.message || 'Login failed';
       toast.error(message);
       return { success: false, message };
     }
@@ -59,10 +59,10 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       setUser(data.user);
-      toast.success('Registration successful! Welcome aboard.');
+      toast.success('Registration successful!');
       return { success: true };
     } catch (error) {
-      const message = error.response?.data?.message || 'Registration failed. Please try again.';
+      const message = error.response?.data?.message || 'Registration failed';
       toast.error(message);
       return { success: false, message };
     }
@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await authAPI.logout();
     } catch (error) {
-      // proceed with local logout regardless
+      // Continue with logout
     } finally {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
