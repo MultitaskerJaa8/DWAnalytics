@@ -2,8 +2,6 @@ const User = require('../models/User');
 const Department = require('../models/Department');
 const AuditLog = require('../models/AuditLog');
 
-// @desc    Get all users with filters
-// @route   GET /api/user
 const getAllUsers = async (req, res, next) => {
   try {
     const { department, role, employmentStatus } = req.query;
@@ -23,8 +21,6 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
-// @desc    Get single user
-// @route   GET /api/user/:id
 const getUserById = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id)
@@ -41,8 +37,6 @@ const getUserById = async (req, res, next) => {
   }
 };
 
-// @desc    Get lightweight list for dropdowns (supervisor/employee assignment)
-// @route   GET /api/user/list/supervisors-employees
 const getSupervisorsAndEmployees = async (req, res, next) => {
   try {
     const users = await User.find({ role: { $in: ['employee', 'supervisor'] } })
@@ -54,8 +48,6 @@ const getSupervisorsAndEmployees = async (req, res, next) => {
   }
 };
 
-// @desc    Update user details
-// @route   PUT /api/user/:id
 const updateUser = async (req, res, next) => {
   try {
     const { password, ...updateData } = req.body;
@@ -72,20 +64,18 @@ const updateUser = async (req, res, next) => {
       details: `User updated: ${user.name}`, ipAddress: req.ip,
     });
 
-    res.status(200).json({ success: true, message: 'User updated successfully', user });
+    res.status(200).json({ success: true, message: 'User updated', user });
   } catch (error) {
     next(error);
   }
 };
 
-// @desc    Update user role
-// @route   PUT /api/user/:id/role
 const updateUserRole = async (req, res, next) => {
   try {
     const { role } = req.body;
 
     if (!['employee', 'supervisor', 'admin'].includes(role)) {
-      return res.status(400).json({ success: false, message: 'Invalid role specified' });
+      return res.status(400).json({ success: false, message: 'Invalid role' });
     }
 
     const user = await User.findByIdAndUpdate(req.params.id, { role }, { new: true });
@@ -98,14 +88,12 @@ const updateUserRole = async (req, res, next) => {
       details: `Role updated to '${role}' for user: ${user.name}`, ipAddress: req.ip,
     });
 
-    res.status(200).json({ success: true, message: 'User role updated successfully', user });
+    res.status(200).json({ success: true, message: 'Role updated', user });
   } catch (error) {
     next(error);
   }
 };
 
-// @desc    Delete user
-// @route   DELETE /api/user/:id
 const deleteUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
@@ -121,7 +109,7 @@ const deleteUser = async (req, res, next) => {
       details: `User deleted: ${user.name}`, ipAddress: req.ip,
     });
 
-    res.status(200).json({ success: true, message: 'User deleted successfully' });
+    res.status(200).json({ success: true, message: 'User deleted' });
   } catch (error) {
     next(error);
   }
