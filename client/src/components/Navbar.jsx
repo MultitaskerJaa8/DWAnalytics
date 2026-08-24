@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LogOut, User, Menu, X, BarChart3 } from 'lucide-react';
+import { LogOut, User, Menu, BarChart3 } from 'lucide-react';
 import { getInitials } from '../utils/helpers';
 
 const Navbar = ({ onMenuToggle }) => {
@@ -18,7 +18,6 @@ const Navbar = ({ onMenuToggle }) => {
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo & Title */}
           <div className="flex items-center space-x-4">
             <button onClick={onMenuToggle} className="lg:hidden p-2 rounded-lg hover:bg-gray-100">
               <Menu className="w-5 h-5 text-gray-600" />
@@ -34,7 +33,6 @@ const Navbar = ({ onMenuToggle }) => {
             </Link>
           </div>
 
-          {/* User Menu */}
           <div className="flex items-center space-x-4">
             <div className="hidden md:block text-right">
               <p className="text-sm font-semibold text-gray-800">{user?.name}</p>
@@ -56,9 +54,7 @@ const Navbar = ({ onMenuToggle }) => {
                     <div className="p-4 border-b border-gray-200">
                       <p className="font-semibold text-gray-800">{user?.name}</p>
                       <p className="text-xs text-gray-500">{user?.email}</p>
-                      <p className="text-xs text-gray-500 mt-1">
-                        {user?.designation} | {user?.department?.name}
-                      </p>
+                      <p className="text-xs text-gray-500 mt-1">{user?.designation} | {user?.department?.name}</p>
                     </div>
                     <Link
                       to="/profile"
