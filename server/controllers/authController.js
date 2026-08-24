@@ -7,8 +7,6 @@ const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 };
 
-// @desc    Register new user
-// @route   POST /api/auth/register
 const registerUser = async (req, res, next) => {
   try {
     const { employeeId, name, email, password, department, designation, role, phone, reportingManager } = req.body;
@@ -19,12 +17,12 @@ const registerUser = async (req, res, next) => {
 
     const userExists = await User.findOne({ $or: [{ email }, { employeeId }] });
     if (userExists) {
-      return res.status(400).json({ success: false, message: 'User with this email or employee ID already exists' });
+      return res.status(400).json({ success: false, message: 'User already exists' });
     }
 
     const deptExists = await Department.findById(department);
     if (!deptExists) {
-      return res.status(400).json({ success: false, message: 'Invalid department selected' });
+      return res.status(400).json({ success: false, message: 'Invalid department' });
     }
 
     const user = await User.create({
@@ -36,7 +34,7 @@ const registerUser = async (req, res, next) => {
 
     await AuditLog.create({
       user: user._id, action: 'REGISTER', module: 'Auth',
-      details: `New user registered: ${user.name} (${user.employeeId})`, ipAddress: req.ip,
+      details: `New user registered: ${user.name}`, ipAddress: req.ip,
     });
 
     const populatedUser = await User.findById(user._id).populate('department', 'name code');
@@ -50,8 +48,6 @@ const registerUser = async (req, res, next) => {
   }
 };
 
-// @desc    Login user
-// @route   POST /api/auth/login
 const loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -64,14 +60,14 @@ const loginUser = async (req, res, next) => {
 
     if (!user || !(await user.comparePassword(password))) {
       await AuditLog.create({
-        action: 'LOGIN', module: 'Auth', details: `Failed login attempt for email: ${email}`,
+        action: 'LOGIN', module: 'Auth', details: `Failed login: ${email}`,
         ipAddress: req.ip, status: 'failure',
       });
-      return res.status(401).json({ success: false, message: 'Invalid email or password' });
+      return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
     if (user.employmentStatus === 'terminated' || user.employmentStatus === 'inactive') {
-      return res.status(403).json({ success: false, message: 'Your account has been deactivated. Contact admin.' });
+      return res.status(403).json({ success: false, message: 'Account is inactive' });
     }
 
     user.lastLogin = new Date();
@@ -90,8 +86,6 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-// @desc    Get current logged in user
-// @route   GET /api/auth/me
 const getMe = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id)
@@ -103,8 +97,6 @@ const getMe = async (req, res, next) => {
   }
 };
 
-// @desc    Update profile
-// @route   PUT /api/auth/profile
 const updateProfile = async (req, res, next) => {
   try {
     const { name, phone, profileImage } = req.body;
@@ -115,20 +107,18 @@ const updateProfile = async (req, res, next) => {
     if (profileImage) user.profileImage = profileImage;
 
     await user.save();
-    res.status(200).json({ success: true, message: 'Profile updated successfully', user });
+    res.status(200).json({ success: true, message: 'Profile updated', user });
   } catch (error) {
     next(error);
   }
 };
 
-// @desc    Change password
-// @route   PUT /api/auth/change-password
 const changePassword = async (req, res, next) => {
   try {
     const { currentPassword, newPassword } = req.body;
 
     if (!currentPassword || !newPassword) {
-      return res.status(400).json({ success: false, message: 'Please provide current and new password' });
+      return res.status(400).json({ success: false, message: 'Please provide both passwords' });
     }
 
     const user = await User.findById(req.user._id).select('+password');
@@ -146,8 +136,6 @@ const changePassword = async (req, res, next) => {
   }
 };
 
-// @desc    Logout (audit logged)
-// @route   POST /api/auth/logout
 const logoutUser = async (req, res, next) => {
   try {
     await AuditLog.create({
