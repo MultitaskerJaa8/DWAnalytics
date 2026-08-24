@@ -1,37 +1,14 @@
-# Dependencies
 node_modules/
 client/node_modules/
 server/node_modules/
-
-# Build outputs
 client/build/
 dist/
-
-# Uploads
 server/uploads/*
 !server/uploads/.gitkeep
-
-# Logs
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 *.log
-
-# OS files
 .DS_Store
 Thumbs.db
-
-# Editor
-.vscode/*
-!.vscode/settings.json
+.vscode/
 .idea/
-
-# Vercel
 .vercel
-
-# ALLOW .env files for demo project (COMMENT OUT THESE LINES):
-# .env
-# server/.env
-# client/.env
-# .env.local
-# .env.production
