@@ -1,22 +1,24 @@
 {
   "name": "digital-workforce-analytics",
   "version": "1.0.0",
-  "description": "Digital Workforce Performance Analytics Platform for Government",
-  "private": true,
+  "description": "Government Digital Workforce Performance Analytics Platform",
+  "main": "server/server.js",
   "scripts": {
-    "install-server": "cd server && npm install --legacy-peer-deps",
-    "install-client": "cd client && npm install --legacy-peer-deps",
-    "postinstall": "npm run install-server && npm run install-client",
-    "server": "cd server && npm run dev",
-    "client": "cd client && npm start",
-    "start": "concurrently -n SERVER,CLIENT -c green,blue \"npm run server\" \"npm run client\"",
-    "seed": "cd server && npm run seed",
-    "build": "cd client && npm run build"
+    "start": "node server/server.js",
+    "server": "nodemon server/server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "npm install && npm install --prefix client && npm run build --prefix client",
+    "seed": "node server/utils/seedData.js"
   },
-  "devDependencies": {
-    "concurrently": "^8.2.2"
+  "keywords": ["government", "analytics", "performance", "workforce"],
+  "author": "Government Digital Initiative",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^8.2.0"
   },
   "engines": {
-    "node": ">=20.x"
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   }
 }
